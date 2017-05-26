@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link type="text/css" rel="stylesheet" href="/static/main.css" />
+
+  <title>Blog</title>
+</head>
+
+<body>
+  <a href="/blog" class="main-title">
+    Blog
+  </a>
+  {% for p in posts %}  {{ p.render() | safe }}
+      <a class="comment-post" href="/blog/commentpost/{{p.key().id()}}">Post Comment</a>
+                  <span class="voteCount">{{p.like}} Likes</span>
+      <br><br>
+  {% endfor %}
+  <div class="login-area">
+    {% if user %}
+      {{user.name}} (<a class="login-link" href="/logout">logout</a>)
+    {% else %}
+      <a class="login-link" href="/login">login</a>
+      |
+      <a class="login-link" href="/signup">signup</a>
+    {% endif %}
+  </div>
+
+  <div id="content">
+  {% block content %}
+  {% endblock %}
+  </div>
+</body>
+
+</html>
+

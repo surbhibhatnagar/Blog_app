@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <h2>Comment</h2>
+    {{post.render() | safe}}
+    <form method="post">
+      <label>
+        <div>Comment</div>
+        <textarea name="content"></textarea>
+      </label>
+      <input type="submit" value="Comment" >
+     <a href="/blog" class="btn">Cancel</a>
+    </form>
+   {% for c in comments %}
+       {{ c.render() | safe }}
+        {% if user.name|string() in c["author"]|string() %}
+        <a class="edit-comment" href="/blog/editcomment/{{c.key().id()}}/{{post.key().id()}}">Edit comment</a>
+        <a class="delete-comment" href="/blog/deletecomment/{{c.key().id()}}/{{post.key().id()}}">Delete comment</a>
+        {% endif %}
+       <br><br>
+   {% endfor %}
+
+{% endblock %}

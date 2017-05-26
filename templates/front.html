@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link type="text/css" rel="stylesheet" href="/static/main.css"/>
+    <!-- Add icon library -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script> -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <title>Blog</title>
+</head>
+
+<body>
+<a href="/blog" class="main-title">
+   Welcome to your home page
+</a>
+<a class="new-post" href="/blog/newpost">Add new post</a>
+{% for p in posts %}
+    {{ p.render() | safe }}
+    {% if user.name|string() in p["author"]|string() %}
+        <a class="edit-post" href="/blog/editpost/{{ p.key().id() }}">Edit post</a>
+        <a class="delete-post" href="/blog/deletepost/{{ p.key().id() }}">Delete post</a>
+        <span class="voteCount_Author">{{ p.like }} Likes</span>
+    {% else %}
+        <a class="comment-post" href="/blog/commentpost/{{ p.key().id() }}">Post Comment</a>
+        <!-- Use an element to toggle between a like/dislike icon -->
+        <div id="like_unlike">
+            <!--<button id="target" type="button" class="fa fa-thumbs-up"></button>-->
+            <span class="voteCount">{{ p.like }}</span> | <a href="javascript:VoteUp('{{ p.key().id() }}');"
+                                                             class="like-link">Like </a> |
+            <a href="javascript:VoteDown('{{ p.key().id() }}');" class="unlike-link">Unlike </a>
+        </div>
+        <br><br>
+    {% endif %}
+{% endfor %}
+
+<div class="login-area">
+    {% if user %}
+        {{ user.name }} (<a class="login-link" href="/logout">logout</a>)
+    {% else %}
+        <a class="login-link" href="/login">login</a>
+        |
+        <a class="login-link" href="/signup">signup</a>
+    {% endif %}
+</div>
+
+<div id="content">
+    {% block content %}
+    {% endblock %}
+</div>
+
+<script>
+    function VoteUp(blogKey) {
+        $.ajax({
+            type: "POST",
+            url: "/blog/up",
+            dataType: 'json',
+            data: JSON.stringify({"blogKey": blogKey})
+        })
+            .done(function (data) {
+                //alert(data.post_like);
+                $('.voteCount').text(data['post_like']);
+                $('.like-link').bind('click', function (e) {
+                    e.preventDefault();
+                })
+                $('.unlike-link').unbind('click')
+
+            });
+    };
+    function VoteDown(blogKey) {
+        $.ajax({
+            type: "POST",
+            url: "/blog/down",
+            dataType: 'json',
+            data: JSON.stringify({"blogKey": blogKey})
+        })
+            .done(function (data) {
+                //alert("data.post_like");
+                $('.voteCount').text(data['post_unlike']);
+                $('.unlike-link').bind('click', function (e) {
+                    e.preventDefault();
+                })
+                $('.like-link').unbind('click')
+
+            });
+    };
+
+</script>
+</body>

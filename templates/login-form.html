@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block content %}
+    <head>
+        <title>Login</title>
+        <style type="text/css">
+            .label {
+                text-align: right
+            }
+
+            .error {
+                color: red
+            }
+        </style>
+    </head>
+
+    <body>
+    <h2>Login</h2>
+    <form method="post">
+        <table>
+            <tr>
+                <td class="label">
+                    Username
+                </td>
+                <td>
+                    <input class="uname" type="text" name="username" value="{{ username }}">
+                </td>
+            </tr>
+            <tr>
+                <td class="label">
+                    Password
+                </td>
+                <td>
+                    <input class="pwd" type="password" name="password" value="">
+                </td>
+            </tr>
+        </table>
+        <div class="error">{{ error }}</div>
+        <tr>
+            <td></td>
+            <td align="center"><input type="submit"></td>
+        </tr>
+    </form>
+    </body>
+{% endblock %}
+
