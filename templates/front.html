@@ -74,7 +74,7 @@
             data: JSON.stringify({"blogKey": blogKey})
         })
             .done(function (data) {
-                //alert("data.post_like");
+
                 $('.voteCount').text(data['post_unlike']);
                 $('.unlike-link').bind('click', function (e) {
                     e.preventDefault();

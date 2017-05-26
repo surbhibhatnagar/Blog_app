@@ -382,7 +382,7 @@ class VoteHandlerDown(BlogHandler):
         data = json.loads(self.request.body)
         key = db.Key.from_path('Post', int(data['blogKey']), parent=blog_key())
         post = db.get(key)
-        if post is not None and post.author == self.user.name:
+        if post is not None and post.author != self.user.name:
             post.like -= 1
             if post.like < 0:
                 post.like = 0
